@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.boardRepository.BoardMapper">
+	<!-- 게시글 갯수 -->
+	<select id="boardCount" resultType="Integer">
+	
+		select count(*) from board where ${pag.searchType} like '%${pag.searchKeyword}%';
+	
+	</select>
+
+
+	<!-- 게시글 조회 -->
+	<select id="boardInfo" resultType="com.example.demo.boardVo.BoardEntVo" parameterType="com.example.demo.boardPaging.BoardPaging">
+	
+		select b.*, a.name 
+		from board b join account a on b."accountId" = a.id where b.${pag.searchType} like '%${pag.searchKeyword}%' 
+		order by id desc limit #{pag.recordsPerPage} offset #{pag.startPage};
+	
+	</select>
+	
+	<!-- 게시글 상세 조회 (id로) -->
+	<select id="boardDetInfo" resultType="com.example.demo.boardVo.BoardEntVo">
+	
+		select b.*, a.name from board b join account a on b."accountId" = a.id where b.id = #{id};
+	
+	</select>
+	
+	<!-- 	게시글 상세 조회와 맞는 파일 정보 조회 -->
+	<select id="boardDetFile" resultType="com.example.demo.boardVo.BoardFileDownVo">
+	
+		select * from file where boardid = #{id} and deleteyn = 'false';
+	
+	</select>
+	
+	<update id="boardMod">
+	
+		update board set tit = #{board.tit}, cont = #{board.cont}, "modDate" = pg_catalog.clock_timestamp() where id = #{board.id};
+	
+	</update>
+	
+	<!-- 게시글 추가 (첨부파일 없음)-->
+	<insert id="boardAdd" parameterType="com.example.demo.boardDto.BoardDto">
+	
+		insert into board (tit,cont,"regDate","accountId") values(#{board.tit},#{board.cont},pg_catalog.clock_timestamp(),#{token.id});
+	
+	</insert>
+	
+	<!-- 첨부파일 추가 -->
+	<insert id="boardFile">
+	
+		insert into file ("originalName","saveDir",inserttime, boardId, "saveName") values (#{originalName},#{dir},pg_catalog.clock_timestamp(),currval('board_id_seq'),#{saveName});
+	
+	</insert>
+	
+	<!-- 수정시 첨부파일 추가 -->
+	<insert id="boardModFile">
+	
+		insert into file ("originalName","saveDir",inserttime, boardId, "saveName") values (#{originalName},#{dir},pg_catalog.clock_timestamp(),#{boardDto.id},#{saveName});
+	
+	</insert>
+
+	<!-- 게시글 삭제 -->
+	<delete id="boardDel" parameterType="Integer">
+	
+		delete from board where id = #{id};
+	
+	</delete>
+
+	<!-- 첨부파일 다운로드 -->
+	<select id="getfile" parameterType="Integer" resultType="com.example.demo.boardVo.BoardFileDownVo">
+
+		select * from file where id = #{id};
+
+	</select>
+
+
+
+
+
+
+</mapper>
