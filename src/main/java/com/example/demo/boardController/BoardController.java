@@ -150,7 +150,7 @@ public class BoardController {
 	}
 
 	//파일 다운로드
-	@GetMapping("/user/board/filedownload/{id}")
+	@GetMapping("/board/filedownload/{id}")
 	public ResponseEntity<Resource> BoardFileDownload(@PathVariable int id) throws IOException {
 		//file 정보를 불러옴
 		BoardFileDownVo file = boardService.getfile(id);
@@ -172,6 +172,12 @@ public class BoardController {
 
 		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 //		return saveFile;
+	}
+
+	//파일 삭제
+	@GetMapping("/board/fileDel/{id}")
+	public void FileDel(@PathVariable int id){
+		boardService.boardDelFile(id);
 	}
 
 	

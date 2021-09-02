@@ -93,5 +93,12 @@ public class BoardServiceImp implements BoardService{
 		return boardMapper.getfile(id);
 	}
 
+	//첨부파일 삭제
+	@Override
+	public void boardDelFile(int id){
+
+		boardMapper.boardDelFile(id);
+	}
+
 	
 }

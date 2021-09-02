@@ -40,8 +40,7 @@ public interface BoardService{
 	//첨부파일 다운로드
 	public BoardFileDownVo getfile(int id);
 
-	
-
-	
+	//첨부파일 삭제
+	public void boardDelFile(int id);
 
 }

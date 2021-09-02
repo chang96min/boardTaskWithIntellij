@@ -59,6 +59,13 @@
 	
 	</insert>
 
+	<!--첨부파일 삭제 -->
+	<update id="boardDelFile">
+
+		update file set deleteyn = 'true' where id = #{id};
+
+	</update>
+
 	<!-- 게시글 삭제 -->
 	<delete id="boardDel" parameterType="Integer">
 	

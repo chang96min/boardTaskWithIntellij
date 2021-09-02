@@ -47,4 +47,7 @@ public interface BoardMapper {
 
 	//첨부파일 다운
 	BoardFileDownVo getfile(@Param("id") int id);
+
+	//첨부파일 삭제
+	void boardDelFile(@Param("id") int id);
 }
